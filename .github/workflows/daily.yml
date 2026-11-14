@@ -37,6 +37,7 @@ jobs:
           git config user.email "nana-radar@qihui.com"
           git add -A
           git diff --staged --quiet || git commit -m "📡 娜娜技术雷达日报 $(TZ=Asia/Shanghai date +%Y-%m-%d)"
+          git pull --rebase origin main
           git push
       - name: 部署到 GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
