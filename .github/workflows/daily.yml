@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write           # 允许 workflow 提交日报回仓库
+  pages: write              # 允许部署 GitHub Pages
+  id-token: write           # Pages 认证
 
 jobs:
   radar:
@@ -36,3 +38,11 @@ jobs:
           git add -A
           git diff --staged --quiet || git commit -m "📡 娜娜技术雷达日报 $(TZ=Asia/Shanghai date +%Y-%m-%d)"
           git push
+      - name: 部署到 GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          user_name: '娜娜技术雷达'
+          user_email: 'nana-radar@qihui.com'
+          commit_message: '📡 娜娜日报 Pages 发布 $(TZ=Asia/Shanghai date +%Y-%m-%d)'
