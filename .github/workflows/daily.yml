@@ -35,10 +35,16 @@ jobs:
         run: |
           git config user.name "娜娜技术雷达"
           git config user.email "nana-radar@qihui.com"
+          # 先拉取远程最新，避免 push 冲突
+          git fetch origin main
+          # 暂存雷达产出
           git add -A
-          git diff --staged --quiet || git commit -m "📡 娜娜技术雷达日报 $(TZ=Asia/Shanghai date +%Y-%m-%d)"
-          git pull --rebase origin main
-          git push
+          # 有变更才 commit 并 push
+          if ! git diff --staged --quiet; then
+            git commit -m "📡 娜娜技术雷达日报 $(TZ=Asia/Shanghai date +%Y-%m-%d)"
+            git rebase origin/main || (git rebase --abort && git merge origin/main)
+            git push
+          fi
       - name: 部署到 GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
