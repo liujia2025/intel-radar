@@ -18,17 +18,16 @@ jobs:
         with:
           python-version: '3.11'
       # 注意：本项目纯 Python 标准库，零第三方依赖，无需 pip install
-      - name: 运行娜娜技术雷达
+      - name: 运行娜娜技术雷达（采集）
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_MODEL: ${{ secrets.LLM_MODEL }}
           TIKHUB_API_KEY: ${{ secrets.TIKHUB_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RADAR_SITE_NAME: ${{ vars.RADAR_SITE_NAME || '娜娜技术雷达' }}
-          RADAR_SITE_BY: ${{ vars.RADAR_SITE_BY || '娜娜 · 嘉儿的家情报局' }}
-          RADAR_EDITOR: ${{ vars.RADAR_EDITOR || '娜娜' }}
         run: python -m radar run --if-missing
+      - name: 生成纯数据日报
+        run: python -m radar.daily_report
       - name: 提交日报
         run: |
           git config user.name "娜娜技术雷达"
